@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "interp.h"
+#include "matriz.h"
 
 /* Protótitpo das funções encapsuladas */
 
@@ -18,13 +19,37 @@ void Chebyshev (int n, double a, double b, double* xi)
 
 void NewtonCoef (int n, double* xi, double (*f) (double), double* bi)
 {
+    double** mat = matcria (n,n);
+    int i, j;
+    for(j = 0; j < n; j++)
+    {
+        for(i = j; i >= 0; i--)
+        {
+            if(i == j)
+            {
+                mat[i][j] = f(xi[i]);
+            }
+            else
+            {
+                mat[i][j] = (mat[i+1][j] - mat[i][j-1]) / (xi[j] - xi[i]);
+            }
+        }
+        bi[j] = mat[0][j];
+    }
 
-    for (int i = 0; i < n; i++)
-        bi[i] = DDNewton(n, xi, f, 0, i);
 }
 
-double NewtonAval (int n, double* xi, double* bi, double x)
+/*
+void NewtonCoef (int n, double* xi, double (*f) (double), double* bi)
+{
 
+    for (int i = 0; i < n; i++)
+        bi[i] = DDNewton(n, xi, f, 0, i);  // IMPLEMENTAÇÃO SEM CACHE
+}
+*/
+
+
+double NewtonAval (int n, double* xi, double* bi, double x)
 {
     double aux[n];  //armazena valores acumulados do produtorio de (x - xi) 
     double f;  //avaliação 
