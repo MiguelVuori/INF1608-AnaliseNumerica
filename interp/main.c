@@ -14,13 +14,6 @@ void exibeVetor(int n, double* v)
     printf("\n");
 }
 
-double* zeraVetor(int n, double* v)
-{
-    for(int i = 0; i < n; i++)
-        v[i] = 0;
-    return v;
-}
-
 double erroMaximoSin(int n, double a, double b)
 {
     double fat = 1;
