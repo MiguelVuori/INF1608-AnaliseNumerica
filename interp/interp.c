@@ -36,6 +36,7 @@ void NewtonCoef (int n, double* xi, double (*f) (double), double* bi)
         }
         bi[j] = mat[0][j];
     }
+    matlibera ( n, mat);
 
 }
 
