@@ -2,17 +2,6 @@
 #include "metiter.h"
 #include "matriz.h"
 
-void eexibeVetor(int n, double* v)
-{   
-    int i;
-
-    for(i = 0; i < n;i++)
-    {
-        printf("%f | ",v[i]);
-    }
-    printf("\n");
-}
-
 int Jacobi (int n, double** A, double* b, double* x, double tol)
 {
     int interacoes = 0, tam = n;
@@ -52,14 +41,14 @@ int Jacobi (int n, double** A, double* b, double* x, double tol)
             
             
         multmv (n,n,LU,x,vet);
-            
+        
+        
         for (int j = 0; j < n ; j++)
         {
             vet[j] = b[j] - vet[j];
         }
 
-        multmv (n,n,LU,vet,x);
-        eexibeVetor(n,x);
+        multmv (n,n,DI,vet,x);
 
         vetlibera (vet);
 
@@ -73,13 +62,58 @@ int Jacobi (int n, double** A, double* b, double* x, double tol)
         N2res = norma2 (n,res);
 
         interacoes++;
-        printf("%f\n",N2res);
-
-        if(interacoes == 10)
-            break;
     }
 
     matlibera (n,LU);
     matlibera (n,DI);
     return interacoes;
+}
+
+int GradConj (int n, double** A, double* b, double* x, double tol)
+{
+    int iteracoes = 0, tam = n;
+    double *res = vetcria(n), *d = vetcria(n),N2res,alpha,
+    *Ad = vetcria(n),alphaD[n],*res_post = vetcria(n),betha;
+
+    multmv (n,n,A,x,res);
+
+    for(int i = 0 ; i < n ; i++)
+    {
+        res[i] = b[i] - res[i];
+    }
+    d = res;
+    
+    N2res = norma2 (n,res);
+
+    while(N2res > tol)
+    {
+        multmv(n,n,A,d,Ad);
+        alpha = escalar(n,res,res)/escalar(n,d,Ad);
+
+        for(int i = 0 ; i < n ; i++)
+        {
+            Ad[i] = alpha * Ad[i];
+            alphaD[i] = alpha * d[i];
+            res_post[i] = res[i] - Ad[i];
+            x[i] = x[i] + alphaD[i]; 
+        }
+
+        betha = escalar(n,res_post,res_post)/escalar(n,res,res);
+
+        for(int i = 0 ; i < n ; i++)
+        {
+            alphaD[i] = betha * d[i];
+            d[i] = res_post[i] + alphaD[i]; 
+        }
+
+        for(int i = 0 ; i < n ; i++)
+        {
+            res_post[i] = b[i] - res_post[i];
+        }
+
+        res = res_post;
+        N2res = norma2 (n,res);
+
+    iteracoes++;
+    } 
 }
