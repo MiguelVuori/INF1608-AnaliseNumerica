@@ -66,6 +66,7 @@ int Jacobi (int n, double** A, double* b, double* x, double tol)
 
     matlibera (n,LU);
     matlibera (n,DI);
+    vetlibera(res);
     return interacoes;
 }
 
