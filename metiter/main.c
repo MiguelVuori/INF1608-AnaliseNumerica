@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "metiter.h"
+#include "matriz.h"
 
 void exibeVetor(int n, double* v)
 {   
@@ -40,11 +41,11 @@ int main ()
     printf("Vetor Solucao:\n");
     exibeVetor(6,x2);
 
-    printf("Numero de interacoes(Jacobi) de M1 = %d\n",GradConj (2,M1,b,x3,tol));
+    printf("Numero de interacoes(GradConj) de M1 = %d\n",GradConj (2,M1,b,x3,tol));
     printf("Vetor Solucao:\n");
     exibeVetor(2,x3);
 
-    printf("Numero de interacoes(Jacobi) de M2 = %d\n",GradConj (6,M2,b2,x4,tol));
+    printf("Numero de interacoes(GrandConj) de M2 = %d\n",GradConj (6,M2,b2,x4,tol));
     printf("Vetor Solucao:\n");
     exibeVetor(6,x4);
     return 0;
