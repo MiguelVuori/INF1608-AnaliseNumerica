@@ -2,17 +2,6 @@
 #include "metiter.h"
 #include "matriz.h"
 
-void eexibeVetor(int n, double* v)
-{   
-    int i;
-
-    for(i = 0; i < n;i++)
-    {
-        printf("%f | ",v[i]);
-    }
-    printf("\n");
-}
-
 int Jacobi (int n, double** A, double* b, double* x, double tol)
 {
     int interacoes = 0;
